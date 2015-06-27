@@ -23,6 +23,7 @@ TODO:
 
 set_time_limit(0);
 error_reporting(0);
+mkdir('out', 0755);
 
 
 function options() {
