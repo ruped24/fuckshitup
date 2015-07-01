@@ -1213,7 +1213,7 @@ function scan() {
 
 print "\n  Options:\n";
 print "    sqli 			- SQL Injection\n";
-print "    blind_sqli 				- Blind SQL Injection\n";
+print "    blind_sqli 			- Blind SQL Injection\n";
 print "    xss 			- Cross Site Scripting\n";
 print "    lfi 			- Local File Inclusion\n";
 print "    rfi 			- Remote File Inclusion\n";
