@@ -1,7 +1,7 @@
 
 ![](https://img.shields.io/badge/fuckshitup-php-purple.svg)
 
-#Agenda
+## Agenda
 
 FuckShitUp 0.1 - Multi Vulnerabilities Scanner
 
@@ -10,7 +10,7 @@ Basically, FSU is bunch of tools written in PHP-CLI. Using build-in functions, y
 More url's -> more vuln's.
 For educational purposes only.
 
-#Intro
+## Intro
 
 - Data grabbing:
  - URL's (geturl/massurl) -> (scan)
@@ -23,7 +23,7 @@ For educational purposes only.
  - FTP, SSH, DB's, IMAP (multibruter)
  - Accurate SSH bruteforce (brutefpds)
 
-#Plan
+## Plan
 
 - Web Apps
  - Grab url's via 'geturl' or 'massurl' (massurl requires list of tags as file)
@@ -46,7 +46,7 @@ For educational purposes only.
  - 'Show' display specific file
  - 'Clear' and 'filter' - remove duplicates, remove blacklisted url's
 
-#Others
+## Others
 
 MultiBrtuer requirements (php5):
  - php5-mysql - for mysql connections
